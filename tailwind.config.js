@@ -1,8 +1,16 @@
+const defaultTheme = require("tailwindcss/defaultTheme");
+
 module.exports = {
-  purge: ["./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"],
-  darkMode: false,
+  content: [
+    "./pages/**/*.{js,ts,jsx,tsx}",
+    "./components/**/*.{js,ts,jsx,tsx}",
+  ],
   theme: {
     extend: {},
+    fontFamily: {
+      serif: ["Bodoni Moda", "serif"],
+      custom: ["Roboto Mono", "monospace"],
+    },
   },
   plugins: [],
 };
