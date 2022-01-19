@@ -1,54 +1,57 @@
-import React, { Component } from "react";
+import React from "react";
 import { useMoralis } from "react-moralis";
-import { AVALANCHE_TESTNET_PARAMS } from "../Util/InjectAvaxNetwork";
+import { connect, useSelector, useDispatch } from "react-redux";
+import { setAuth } from "../../redux/actions/moralis";
+import {
+  selectAuthenticationStatus,
+  selectNetworkStatus,
+} from "../../redux/selectors/moralis";
+import * as types from "../../redux/types";
 
-export default class AuthenticationAction extends Component {
-  constructor(props) {
-    super(props);
-  }
-
-  componentDidMount() {
-    this.authenticated = false;
-    this.props.newComponentMounted();
-  }
-
-  completeAction = (props) => {
-    if (!this.authenticated) {
-      this.authenticated = true;
-      this.props.actionCompleted(props);
-    }
-  };
-
-  render() {
-    return (
-      <div>
-        <Authenticate handleSelection={this.completeAction} />
-      </div>
-    );
-  }
-}
-
-const Authenticate = (props) => {
-  const { authenticate, isAuthenticated } = useMoralis();
-
-  if (isAuthenticated) {
-    props.handleSelection({});
-  }
+const AuthenticationAction = (props) => {
+  const { authenticate } = useMoralis();
+  const dispatch = useDispatch();
+  const authenticationStatus = useSelector(selectAuthenticationStatus);
+  const networkStatus = useSelector(selectNetworkStatus);
 
   const authProps = {
-    onComplete: () => props.handleSelection({}),
-    provider: AVALANCHE_TESTNET_PARAMS.chainId,
+    provider: networkStatus?.chainId,
     signingMessage: "Simple Joe Authentication",
+  };
+
+  if (authenticationStatus) {
+    this.props.actionCompleted({});
+  }
+
+  const completeAction = () => {
+    if (!authenticationStatus) {
+      authenticate(authProps);
+      dispatch({ type: types.SET_AUTH, payload: true });
+      props.actionCompleted(props);
+    }
   };
 
   return (
     <div>
       <button
         className="font-light text-white text-2xl font-custom"
-        onClick={() => authenticate(authProps)}
+        onClick={() => completeAction()}
       >
         Connect Wallet
       </button>
     </div>
   );
 };
+
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.moralis,
+});
+
+const mapDispatchToProps = {
+  setAuth: setAuth,
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(AuthenticationAction);

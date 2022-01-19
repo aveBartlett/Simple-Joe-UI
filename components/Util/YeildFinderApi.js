@@ -3,6 +3,7 @@ export default callApi = async () => {
   return new Promise((resolve, reject) => {
     resolve({
       pair: {
+        address: "0xa389f9430876455c36478deea9769b7ca4e3ddb1",
         token1: {
           //wavax
           chainId: chainId,

@@ -5,6 +5,7 @@ import Popup from "reactjs-popup";
 import { AVALANCHE_TESTNET_PARAMS } from "../Util/InjectAvaxNetwork";
 import addAvalancheNetwork from "../Util/InjectAvaxNetwork";
 import Router from "next/router";
+import { setAuth, setNetwork } from "../../redux/actions/moralis";
 
 export default class Account extends Component {
   constructor(props) {

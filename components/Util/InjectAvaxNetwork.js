@@ -34,6 +34,20 @@ export const AVALANCHE_LOCAL_PARAMS = {
   blockExplorerUrls: ["https://testnet.snowtrace.io/"],
 };
 
+export const AVALANCHE_MORALIS_PARAMS = {
+  chainId: "0xA868",
+  chainName: "Avalanche Local C-Chain",
+  nativeCurrency: {
+    name: "Avalanche",
+    symbol: "AVAX",
+    decimals: 18,
+  },
+  rpcUrls: [
+    "https://speedy-nodes-nyc.moralis.io/543b50e7bb5ca4f50c9df822/avalanche/mainnet",
+  ],
+  blockExplorerUrls: ["https://snowtrace.io/"],
+};
+
 export default function addAvalancheNetwork(network) {
   window.ethereum
     .request({
