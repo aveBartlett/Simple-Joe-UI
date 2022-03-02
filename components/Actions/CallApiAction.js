@@ -1,42 +1,30 @@
-import React, { Component } from "react";
+import React, { useContext } from "react";
+import { MainContext } from "../../context/Context";
+import { sleep } from "../Util/Util";
+import { callApi } from "../Util/YeildFinderApi";
 
-export default class CallApiAction extends Component {
-  constructor(props) {
-    super(props);
-  }
+const CallApiAction = (props) => {
+  const context = useContext(MainContext);
 
-  componentDidMount() {
-    this.props.newComponentMounted();
-  }
-
-  callYeildApi = () => {};
-
-  completeAction = () => {
-    let jsonOutput = {
-      pair: {
-        token1: {
-          chainId: "",
-          address: "",
-        },
-        token2: {
-          chainId: "",
-          address: "",
-        },
-      },
-    };
-    this.props.actionCompleted(jsonOutput);
+  const callYieldApi = async () => {
+    const jsonOutput = await callApi();
+    context.setLpOptionsJson(jsonOutput);
+    props.actionCompleted();
   };
 
-  render() {
-    return (
-      <div className="border-white border-solid border-2 hover:bg-white">
-        <button
-          className="font-light text-white text-lg font-custom px-2 hover:text-black"
-          onClick={() => this.callYeildApi()}
-        >
-          Find best yeilds
-        </button>
-      </div>
-    );
-  }
-}
+  return (
+    <div
+      className="border-slate-300 border-solid rounded-md
+ border-2 flex items-center hover:bg-white"
+    >
+      <button
+        className="font-light text-white text-2xl font-custom px-2 hover:text-black"
+        onClick={async () => await callYieldApi()}
+      >
+        Find best yields
+      </button>
+    </div>
+  );
+};
+
+export default CallApiAction;
