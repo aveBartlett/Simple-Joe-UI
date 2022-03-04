@@ -1,8 +1,26 @@
 import {
+  networks,
   AVALANCHE_MAINNET_PARAMS,
   AVALANCHE_TESTNET_PARAMS,
   AVALANCHE_LOCAL_PARAMS,
-} from "./Constants";
+} from "../Util/Constants";
+
+export const getNetworkFromChainId = (chainId) => {
+  for (const network of networks) {
+    if (chainId && chainId.toUpperCase() === network.chainId.toUpperCase()) {
+      return network;
+    }
+  }
+};
+
+export const isChainIdValid = (chainId) => {
+  for (const network of networks) {
+    if (chainId && chainId.toUpperCase() === network.chainId.toUpperCase()) {
+      return true;
+    }
+  }
+  return false;
+};
 
 export default function addAvalancheNetwork(network) {
   window.ethereum

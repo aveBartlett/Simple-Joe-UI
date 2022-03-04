@@ -1,4 +1,4 @@
-import { AVALANCHE_TESTNET_PARAMS } from "./Constants";
+import { AVALANCHE_TESTNET_PARAMS } from "../Util/Constants";
 
 export const callApi = async () => {
   const chainId = AVALANCHE_TESTNET_PARAMS.chainId;

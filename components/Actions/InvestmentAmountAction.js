@@ -1,41 +1,46 @@
 import React, { useContext, useState } from "react";
 import { MainContext } from "../../context/Context";
 import { useMoralis } from "react-moralis";
+import { getImgElementFromTokenAddress } from "../Util/ComponentUtil";
 
 const InvestmentAmountAction = (props) => {
   const [state, setState] = useState({
     investmentValue: "",
   });
-  let prevVal = "";
 
+  const regex = /^[0-9]*[.,]?[0-9]*$/;
   const context = useContext(MainContext);
-  console.log(context);
+  const investmentPair = context.main.selectedJson;
 
   const completeAction = () => {
-    context.setInvestmentAmount(inputValue);
+    context.setInvestmentAmount(state.investmentValue);
     props.actionCompleted();
   };
 
-  const isNumberKey = (val) => {
-    var charCode = val.charCode;
-    if (charCode > 31 && (charCode < 48 || charCode > 57)) return false;
-    return true;
+  const validateNumFormat = (evt) => {
+    var keyEvent = evt || window.event;
+
+    // Handle paste
+    if (keyEvent.type === "paste") {
+      key = event.clipboardData.getData("text/plain");
+    } else {
+      // Handle key press
+      var key = keyEvent.keyCode || keyEvent.which;
+      key = String.fromCharCode(key);
+    }
+    if (!regex.test(key)) {
+      keyEvent.returnValue = false;
+      if (keyEvent.preventDefault) keyEvent.preventDefault();
+    }
   };
 
   const onChangeInput = (evt) => {
     let val = evt.target.value;
-    const   = val.slice(-1);
-    if (isNumberKey(lastKeyPressed)) {
-      prevVal = val;
-    } else {
-      val = prevVal;
-    }
 
     setState((state) => ({
       ...state,
       investmentValue: val,
     }));
-    console.log(state.investmentValue);
   };
 
   return (
@@ -46,8 +51,9 @@ const InvestmentAmountAction = (props) => {
           className=" col-span-3 text-white w-48 text-2xl font-custom bg-black outline-none appearance-none"
           type="text"
           inputMode="decimal"
-          pattern="^[0-9]*[.,]?[0-9]*$"
+          pattern={regex}
           required
+          onKeyPress={(evt) => validateNumFormat(evt)}
           onChange={(evt) => onChangeInput(evt)}
           value={state.investmentValue}
           placeholder="100"
@@ -66,6 +72,10 @@ const InvestmentAmountAction = (props) => {
         onClick={() => completeAction()}
       >
         Supply
+        <div className="flex justify-center">
+          {getImgElementFromTokenAddress(investmentPair.pair.token1.address)}
+          {getImgElementFromTokenAddress(investmentPair.pair.token2.address)}
+        </div>
       </button>
     </div>
   );

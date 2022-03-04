@@ -3,8 +3,11 @@ import MetaMask3D from "../ThreeJs/MetaMask3D";
 import { useMoralis } from "react-moralis";
 import Popup from "reactjs-popup";
 import { AVALANCHE_TESTNET_PARAMS } from "../Util/Constants";
-import { getNetworkFromChainId, isChainIdValid } from "../Util/Util";
-import addAvalancheNetwork from "../Util/InjectAvaxNetwork";
+import {
+  getNetworkFromChainId,
+  isChainIdValid,
+  addAvalancheNetwork,
+} from "../Web3/NetworkUtil";
 import Router from "next/router";
 import { MainContext } from "../../context/Context";
 
@@ -34,11 +37,55 @@ export default class Account extends Component {
   }
 }
 
+const AvaxChainConfirmation = () => {
+  const context = useContext(MainContext);
+  const { chainId, isAuthenticated } = useMoralis();
+  const { setNetwork } = context;
+
+  if (
+    isAuthenticated &&
+    chainId &&
+    context.main.network &&
+    context.main.network.chainId.toUpperCase() != chainId.toUpperCase()
+  ) {
+    setNetwork(getNetworkFromChainId(chainId));
+  }
+
+  if (isAuthenticated && chainId && !isChainIdValid(chainId)) {
+    return (
+      <div className="fixed top-0 bottom-0 left-0 right-0 z-50 backdrop-blur-sm">
+        <div className="transition-all fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-80 h-44 border-white border-solid border-2 bg-black z-10">
+          <div className=" items-stretch flex flex-col">
+            <div className="flex justify-center">
+              <h1 className="flex font-normal font-custom text-white text-2xl py-4 text-center">
+                Switch to {AVALANCHE_TESTNET_PARAMS.chainName}
+              </h1>
+            </div>
+
+            <div className="flex justify-center pt-5">
+              <button
+                onClick={() => addAvalancheNetwork("test")}
+                className="font-normal font-custom text-white hover:text-orange-200 text-lg"
+              >
+                Switch Networks
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return <></>;
+};
+
 const AccountMessage = () => {
-  const { authenticate, isAuthenticated, logout, user } = useMoralis();
+  const { authenticate, isAuthenticated, logout, user, chainId } = useMoralis();
+  const { setAccountDetails } = context;
 
   if (isAuthenticated) {
     const account = user.get("ethAddress");
+    setAccountDetails(retrieveAccountDetails(account, chainId));
     const text = `0x...${account.substring(
       account.length - 6,
       account.length
@@ -114,45 +161,4 @@ const AccountMessage = () => {
       // position="center center"
     );
   }
-};
-
-const AvaxChainConfirmation = () => {
-  const context = useContext(MainContext);
-  const { chainId } = useMoralis();
-  const { setNetwork } = context;
-
-  if (
-    chainId &&
-    context.main.network.chainId &&
-    context.main.network.chainId.toUpperCase() != chainId.toUpperCase()
-  ) {
-    setNetwork(getNetworkFromChainId(chainId));
-  }
-
-  if (chainId && !isChainIdValid(chainId)) {
-    return (
-      <div className="fixed top-0 bottom-0 left-0 right-0 z-50 backdrop-blur-sm">
-        <div className="transition-all fixed top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 w-80 h-44 border-white border-solid border-2 bg-black z-10">
-          <div className=" items-stretch flex flex-col">
-            <div className="flex justify-center">
-              <h1 className="flex font-normal font-custom text-white text-2xl py-4 text-center">
-                Switch to {AVALANCHE_TESTNET_PARAMS.chainName}
-              </h1>
-            </div>
-
-            <div className="flex justify-center pt-5">
-              <button
-                onClick={() => addAvalancheNetwork("test")}
-                className="font-normal font-custom text-white hover:text-orange-200 text-lg"
-              >
-                Switch Networks
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  return <></>;
 };

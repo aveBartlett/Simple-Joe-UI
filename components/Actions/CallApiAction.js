@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { MainContext } from "../../context/Context";
 import { sleep } from "../Util/Util";
-import { callApi } from "../Util/YeildFinderApi";
+import { callApi } from "../Web3/YeildFinderApi";
 
 const CallApiAction = (props) => {
   const context = useContext(MainContext);

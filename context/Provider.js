@@ -6,6 +6,7 @@ class MainProvider extends React.Component {
   state = {
     main: {
       network: AVALANCHE_TESTNET_PARAMS,
+      accountDetails: {},
       tradeListJson: {},
       selectedJson: {},
       investmentAmount: 0,
@@ -23,6 +24,14 @@ class MainProvider extends React.Component {
               main: {
                 ...prevState.main,
                 network,
+              },
+            }));
+          },
+          setAccountDetails: (accountDetails) => {
+            this.setState((prevState) => ({
+              main: {
+                ...prevState.main,
+                accountDetails,
               },
             }));
           },

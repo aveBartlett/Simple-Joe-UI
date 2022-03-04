@@ -16,10 +16,10 @@ const AuthenticationAction = (props) => {
   return (
     <div>
       <button
-        className="font-light text-white text-2xl font-custom"
+        className="font-light text-white text-lg font-custom"
         // onClick={() => completeAction()}
       >
-        Please connect wallet
+        Connect your wallet bro
       </button>
     </div>
   );
