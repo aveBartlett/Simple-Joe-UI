@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
 import { MainContext } from "../../context/Context";
-import { useMoralis } from "react-moralis";
 import { getImgElementFromTokenAddress } from "../Util/ComponentUtil";
 
 const InvestmentAmountAction = (props) => {

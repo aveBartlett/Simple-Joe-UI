@@ -5,13 +5,13 @@ import { MainContext } from "./Context";
 class MainProvider extends React.Component {
   state = {
     main: {
-      network: AVALANCHE_TESTNET_PARAMS,
-      accountDetails: {},
       tradeListJson: {},
       selectedJson: {},
       investmentAmount: 0,
       currentStep: 0,
     },
+    network: AVALANCHE_TESTNET_PARAMS,
+    accountDetails: {},
   };
 
   render() {
@@ -21,22 +21,19 @@ class MainProvider extends React.Component {
           main: this.state.main,
           setNetwork: (network) => {
             this.setState((prevState) => ({
-              main: {
-                ...prevState.main,
-                network,
-              },
+              ...prevState,
+              network,
             }));
           },
           setAccountDetails: (accountDetails) => {
             this.setState((prevState) => ({
-              main: {
-                ...prevState.main,
-                accountDetails,
-              },
+              ...prevState,
+              accountDetails,
             }));
           },
           setLpOptionsJson: (tradeListJson) => {
             this.setState((prevState) => ({
+              ...prevState,
               main: {
                 ...prevState.main,
                 tradeListJson,
@@ -45,6 +42,7 @@ class MainProvider extends React.Component {
           },
           setLpJson: (selectedJson) => {
             this.setState((prevState) => ({
+              ...prevState,
               main: {
                 ...prevState.main,
                 selectedJson,
@@ -53,6 +51,7 @@ class MainProvider extends React.Component {
           },
           setInvestmentAmount: (investAmount) => {
             this.setState((prevState) => ({
+              ...prevState,
               main: {
                 ...prevState.main,
                 investAmount,
@@ -61,6 +60,7 @@ class MainProvider extends React.Component {
           },
           incrStep: () => {
             this.setState((prevState) => ({
+              ...prevState,
               main: {
                 ...prevState.main,
                 currentStep: state.currentStep++,
@@ -69,6 +69,7 @@ class MainProvider extends React.Component {
           },
           decStep: () => {
             this.setState((prevState) => ({
+              ...prevState,
               main: {
                 ...prevState.main,
                 currentStep: state.currentStep--,

@@ -8,6 +8,7 @@ import {
   isChainIdValid,
   addAvalancheNetwork,
 } from "../Web3/NetworkUtil";
+import { retrieveAccountDetails } from "../Web3/AccountUtil";
 import Router from "next/router";
 import { MainContext } from "../../context/Context";
 
@@ -81,11 +82,14 @@ const AvaxChainConfirmation = () => {
 
 const AccountMessage = () => {
   const { authenticate, isAuthenticated, logout, user, chainId } = useMoralis();
+  const context = useContext(MainContext);
   const { setAccountDetails } = context;
 
   if (isAuthenticated) {
     const account = user.get("ethAddress");
-    setAccountDetails(retrieveAccountDetails(account, chainId));
+    // const accountDetails = retrieveAccountDetails(account, chainId);
+    // setAccountDetails({});
+    console.log(context);
     const text = `0x...${account.substring(
       account.length - 6,
       account.length
