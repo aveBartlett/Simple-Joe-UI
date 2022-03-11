@@ -1,4 +1,4 @@
-import React, { Component, useContext } from "react";
+import React, { Component, useContext, useEffect } from "react";
 import MetaMask3D from "../ThreeJs/MetaMask3D";
 import { useMoralis, useMoralisWeb3Api } from "react-moralis";
 import Popup from "reactjs-popup";
@@ -40,7 +40,7 @@ export default class Account extends Component {
 
 const AvaxChainConfirmation = () => {
   const { chainId, isAuthenticated } = useMoralis();
-  const web3Api = useMoralisWeb3Api();
+  const context = useContext(MainContext);
   const { setNetwork } = context;
 
   if (
@@ -84,16 +84,23 @@ const AvaxChainConfirmation = () => {
 const AccountMessage = () => {
   const { authenticate, isAuthenticated, logout, user, chainId } = useMoralis();
   const context = useContext(MainContext);
-  const { setAccountDetails } = context;
   const web3Api = useMoralisWeb3Api();
 
-  if (isAuthenticated) {
-    const account = user.get("ethAddress");
-    const options = { chain: chainId, address: accountAdress };
-    const avaxBalance = await web3Api.getNativeBalance(options);
-    console.log(avaxBalance);
-    const accountDetails = retrieveAccountDetails(web3Api, account, chainId);
-    setAccountDetails(accountDetails);
+  useEffect(async () => {
+    console.log("ayo");
+    if (isAuthenticated) {
+      const accountAddress = user.get("ethAddress");
+      const accountDetails = await retrieveAccountDetails(
+        web3Api,
+        accountAddress,
+        chainId
+      );
+      context.setAccountDetails(accountDetails);
+    }
+  }, [user]);
+
+  if (isAuthenticated && context.main.accountDetails.address) {
+    const account = context.main.accountDetails.address;
     const text = `0x...${account.substring(
       account.length - 6,
       account.length
