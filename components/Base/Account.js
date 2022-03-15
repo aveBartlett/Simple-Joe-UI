@@ -97,7 +97,7 @@ const AccountMessage = () => {
       );
       context.setAccountDetails(accountDetails);
     }
-  }, [user]);
+  }, [user, isAuthenticated]);
 
   if (isAuthenticated && context.main.accountDetails.address) {
     const account = context.main.accountDetails.address;

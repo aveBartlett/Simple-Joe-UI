@@ -22,7 +22,7 @@ export const isChainIdValid = (chainId) => {
   return false;
 };
 
-export default function addAvalancheNetwork(network) {
+export function addAvalancheNetwork(network) {
   window.ethereum
     .request({
       method: "wallet_addEthereumChain",
